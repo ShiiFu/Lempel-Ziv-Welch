@@ -9,6 +9,22 @@ class CompressionLZW:
         """
         self.content = None
 
+    def setContent(self, content):
+        """
+        Définis le contenu à compresser.
+
+        @param content Contenu à compresser
+        """
+        self.content = content
+
+    def setFileName(self, fileName):
+        """
+        Définis le nom du fichier
+
+        @param fileName Nom fichier
+        """
+        self.fileName = fileName
+
     def readFile(self, fileName):
         """
         Lis le contenus du fichier fileName.
