@@ -1,9 +1,9 @@
 #-*- coding:UTF-8 -*-
 #Python 2.7 a ete utilise
 
-class Compression-LZW:
+class CompressionLZW:
 
-    def __init__(self, fileName):
+    def __init__(self):
         """
         Constructor
         """
@@ -11,8 +11,14 @@ class Compression-LZW:
 
     def readFile(self, fileName):
         """
+        Lis le contenus du fichier fileName.
+
+        @param fileName Nom du fichier à lire
         """
         self.fileName = fileName
+        self.file = open(self.fileName, 'r')
+        self.content = self.file.read()
+
 
     def writeFile(self):
         """
@@ -30,3 +36,7 @@ class Compression-LZW:
            fin si
         fin tant que
         écrire le code de w;
+
+if __name__ == '__main__':
+    compress = CompressionLZW()
+    compress.readFile("lorem.txt")
