@@ -1,6 +1,8 @@
 #-*- coding:UTF-8 -*-
 #Python 2.7 a ete utilise
 
+from array import array
+
 class CompressionLZW:
 
     def __init__(self):
@@ -40,11 +42,19 @@ class CompressionLZW:
 
     def writeFile(self):
         """
-    Fonction permettant d'écrire les valeurs compresser dans un fichier binaire.
-    @param self doit avoir comme paramètre un objet CompressionLZW
-    @type self CompressionLZW
+        Fonction permettant d'écrire les valeurs compresser dans un fichier binaire.
+        @param self doit avoir comme paramètre un objet CompressionLZW
+        @type self CompressionLZW
         """
-        print(self.compressed)
+        binaryString =  ""
+        for i in self.compressed:
+            binaryString += "{0:09b}".format(i)
+
+        binaryArray = array("B")
+        for i in range(0, len(binaryString), 8):
+            binaryArray.append(int(binaryString[i:i+8], 2))
+        fileCompressed = open(self.fileName + ".lzwly", "wb")
+        binaryArray.tofile(fileCompressed)
 
     def compress(self):
         """
