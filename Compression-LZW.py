@@ -8,8 +8,8 @@ class CompressionLZW:
         Constructor
         """
         self.content = None
-		self.dictionnaire = []
-		self.compress = []
+        self.dictionnaire = []
+        self.compressed = []
 
     def setContent(self, content):
         """
@@ -40,32 +40,41 @@ class CompressionLZW:
 
     def writeFile(self):
         """
-		Fonction permettant d'écrire les valeurs compresser dans un fichier binaire.
-		@param self doit avoir comme paramètre un objet CompressionLZW
-		@type self CompressionLZW
+    Fonction permettant d'écrire les valeurs compresser dans un fichier binaire.
+    @param self doit avoir comme paramètre un objet CompressionLZW
+    @type self CompressionLZW
         """
+        print(self.compressed)
 
     def compress(self):
-		"""
-		Fonction pour compresser un fichier texte. Il utilise un système d'association entre charactères ASCII qui sont positionné dans le tableau.
+        """
+        Fonction pour compresser un fichier texte. Il utilise un système d'association entre charactères ASCII qui sont positionné dans le tableau.
 
-		"""
+        """
+
+        w = ""
         for c in self.content:
-           if(w + c existe dans le dictionnaire) in self.dictionnaire():
+           if w + c in self.dictionnaire:
                w = w + c
-           else
-               self.dictionnaire.append(w + c)
-               self.compress = w
-               w = cu
-		self.compress = w
-        self.writeFile();
+           else:
+               if w != "" :
+                   self.dictionnaire.append(w + c)
+                   if len(w) > 1:
+                       self.compressed.append(self.dictionnaire.index(w) + 256)
+                   else:
+                       self.compressed.append(ord(w))
+               w = c
 
-	def decompress(self):
-		"""
-		Fonction pour décompresser un fichier binaire. Il lis la valeur binaire (entre 256 et +++) pour pouvoir remplacer ce code par sa valeur il prend la valeur ou l'index
-		de la liste et 256 - n ,  n étant la valeur binaire.
-		"""
+    def decompress(self):
+        """
+        Fonction pour décompresser un fichier binaire. Il lis la valeur binaire (entre 256 et +++) pour pouvoir remplacer ce code par sa valeur il prend la valeur ou l'index
+        de la liste et 256 - n ,  n étant la valeur binaire.
+        """
+        print("Decompress")
 
 if __name__ == '__main__':
     compress = CompressionLZW()
-    compress.readFile("lorem.txt")
+#    compress.readFile("lorem.txt")
+    compress.readFile("toBe.txt")
+    compress.compress()
+    compress.writeFile()
