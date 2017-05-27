@@ -40,7 +40,7 @@ class CompressionLZW:
         self.content = self.file.read()
 
 
-    def writeFile(self):
+    def writeFileC(self):
         """
         Fonction permettant d'écrire les valeurs compresser dans un fichier binaire.
         @param self doit avoir comme paramètre un objet CompressionLZW
@@ -55,10 +55,19 @@ class CompressionLZW:
             binaryArray.append(int(binaryString[i:i+8], 2))
         fileCompressed = open(self.fileName + ".lzwly", "wb")
         binaryArray.tofile(fileCompressed)
+		
+	def writeFileD(self):
+		"""
+		Fonction permettant d'écrire les valeurs décompresser dans un fichier text standar.
+		@param self doit avoir comme paramètre un objet CompressionLZW
+		@type self CompressionLZW
+		"""
+		fileCompressed = open(self.fileName + ".txt", "wb")
+		fileCompressed.write(self.content)
 
     def compress(self):
         """
-        Fonction pour compresser un fichier texte. Il utilise un système d'association entre charactères ASCII qui sont positionné dans le tableau.
+        Fonction pour compresser un fichier texte. Il utilise un système d'association entre charactères ASCII qui sont positionné dans un tableau.
 
         """
 
@@ -81,10 +90,27 @@ class CompressionLZW:
         de la liste et 256 - n ,  n étant la valeur binaire.
         """
         print("Decompress")
+        w = self.content
+        for c in self.content:
+            if (c > 255) and self.dictionnaire[c] != None:
+                ent = self.dictionnaire[c]
+            elif c > 255 and self.dictionnaire[c] == None:
+                ent = w + w[0]
+            else:
+                ent = c
+            sortie = ent
+            self.dictionnaire.append(w+ent[0])
+            w = ent
 
 if __name__ == '__main__':
-    compress = CompressionLZW()
+    #Compression d'un fichier
+	compress = CompressionLZW()
 #    compress.readFile("lorem.txt")
-    compress.readFile("toBe.txt")
-    compress.compress()
-    compress.writeFile()
+	compress.readFile("toBe.txt")
+	compress.compress()
+	compress.writeFileC()
+	#Décompression de ce même fichier
+	decompress = CompressionLZW()
+	decompress.readFile("toBe.txt.lzwly")
+	decompress.writeFileD()
+	
