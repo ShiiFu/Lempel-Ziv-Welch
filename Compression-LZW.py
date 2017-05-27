@@ -56,7 +56,7 @@ class CompressionLZW:
         fileCompressed = open(self.fileName + ".lzwly", "wb")
         binaryArray.tofile(fileCompressed)
 		
-	def writeFileD(self):
+    def writeFileD(self):
 		"""
 		Fonction permettant d'écrire les valeurs décompresser dans un fichier text standar.
 		@param self doit avoir comme paramètre un objet CompressionLZW
@@ -93,11 +93,11 @@ class CompressionLZW:
         w = self.content
         for c in self.content:
             if (c > 255) and self.dictionnaire[c] != None:
-                ent = self.dictionnaire[c]
+               ent = self.dictionnaire[c]
             elif c > 255 and self.dictionnaire[c] == None:
-                ent = w + w[0]
+               ent = w + w[0]
             else:
-                ent = c
+               ent = c
             sortie = ent
             self.dictionnaire.append(w+ent[0])
             w = ent
@@ -112,5 +112,7 @@ if __name__ == '__main__':
 	#Décompression de ce même fichier
 	decompress = CompressionLZW()
 	decompress.readFile("toBe.txt.lzwly")
+	decompress.dictionnaire = compress.dictionnaire
+	decompress.decompress()
 	decompress.writeFileD()
 	
