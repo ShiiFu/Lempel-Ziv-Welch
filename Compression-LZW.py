@@ -29,7 +29,7 @@ class CompressionLZW:
         """
         self.fileName = fileName
 
-    def readFile(self, fileName):
+    def readFileText(self, fileName):
         """
         Lis le contenus du fichier fileName.
 
@@ -38,6 +38,24 @@ class CompressionLZW:
         self.fileName = fileName
         self.file = open(self.fileName, 'r')
         self.content = self.file.read()
+        self.fileName = fileName
+
+    def readFileBin(self, fileName):
+        """
+        Lis le contenus du fichier fileName.
+
+        @param fileName Nom du fichier à lire
+        """
+        self.fileName = fileName
+        self.file = open(self.fileName, 'rb')
+        content = self.file.read()
+
+        binaryString = ""
+        for byte in content:
+            binaryString += "{0:08b}".format(ord(byte))
+
+        for i in range(0, len(binaryString), 9):
+            self.compressed.append(int(binaryString[i:i+9], 2))
 
 
     def writeFileC(self):
@@ -55,10 +73,10 @@ class CompressionLZW:
             binaryArray.append(int(binaryString[i:i+8], 2))
         fileCompressed = open(self.fileName + ".lzwly", "wb")
         binaryArray.tofile(fileCompressed)
-		
+
     def writeFileD(self):
 		"""
-		Fonction permettant d'écrire les valeurs décompresser dans un fichier text standar.
+		Fonction permettant d'écrire les valeurs décompresser dans un fichier texte standard.
 		@param self doit avoir comme paramètre un objet CompressionLZW
 		@type self CompressionLZW
 		"""
@@ -89,7 +107,6 @@ class CompressionLZW:
         Fonction pour décompresser un fichier binaire. Il lis la valeur binaire (entre 256 et +++) pour pouvoir remplacer ce code par sa valeur il prend la valeur ou l'index
         de la liste et 256 - n ,  n étant la valeur binaire.
         """
-        print("Decompress")
         w = self.content
         for c in self.content:
             if (c > 255) and self.dictionnaire[c] != None:
@@ -106,13 +123,12 @@ if __name__ == '__main__':
     #Compression d'un fichier
 	compress = CompressionLZW()
 #    compress.readFile("lorem.txt")
-	compress.readFile("toBe.txt")
+	compress.readFileText("toBe.txt")
 	compress.compress()
 	compress.writeFileC()
 	#Décompression de ce même fichier
 	decompress = CompressionLZW()
-	decompress.readFile("toBe.txt.lzwly")
+	decompress.readFileBin("toBe.txt.lzwly")
 	decompress.dictionnaire = compress.dictionnaire
 	decompress.decompress()
 	decompress.writeFileD()
-	
