@@ -9,7 +9,7 @@ class CompressionLZW:
         """
         Constructor
         """
-        self.content = None
+        self.content = []
         self.dictionnaire = []
         self.compressed = []
 
@@ -107,16 +107,19 @@ class CompressionLZW:
         Fonction pour décompresser un fichier binaire. Il lis la valeur binaire (entre 256 et +++) pour pouvoir remplacer ce code par sa valeur il prend la valeur ou l'index
         de la liste et 256 - n ,  n étant la valeur binaire.
         """
-        w = self.content
-        for c in self.content:
-            if (c > 255) and self.dictionnaire[c] != None:
-               ent = self.dictionnaire[c]
-            elif c > 255 and self.dictionnaire[c] == None:
-               ent = w + w[0]
+        w = chr(self.compressed[0])
+        self.dictionnaire = []
+        self.content = w
+        for c in self.compressed[1:]:
+            if c > 255:
+                if self.dictionnaire[c-256]:
+                    ent = self.dictionnaire[c-256]
+                else:
+                    ent = w + w[0]
             else:
-               ent = c
-            sortie = ent
-            self.dictionnaire.append(w+ent[0])
+               ent = chr(c)
+            self.dictionnaire.append(w + ent[0])
+            self.content += ent
             w = ent
 
 if __name__ == '__main__':
