@@ -93,7 +93,7 @@ class CompressionLZW:
         Fonction pour décompresser un fichier binaire. Il lis la valeur binaire (entre 256 et +++) pour pouvoir remplacer ce code par sa valeur il prend la valeur ou l'index
         de la liste et 256 - n ,  n étant la valeur binaire.
         """
-        print("Decompress")
+        print "Décompression du fichier", self.fileName,"\n"
         w = self.content
         for c in self.content:
             if (c > 255) and self.dictionnaire[c] != None:
@@ -130,7 +130,7 @@ def Compression(infile, outfile):
 def Decompression(infile, outfile):
 	fileD = CompressionLZW()
 	fileD.readFile(infile)
-	fileD.compress()
+	fileD.decompress()
 	fileD.writeFileD(outfile)
 
 
