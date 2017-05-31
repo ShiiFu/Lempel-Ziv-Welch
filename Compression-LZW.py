@@ -8,8 +8,19 @@ import re
 
 
 class CompressionLZW:
+    """
+    Classe définnisant les paramètres d'un fichier à compresser ou à
+    décompresser
+    @ivar content Données non compressé
+    @type content list
+    @ivar dictionnaire Dictionnaire où sont stockés les groupes de lettres
+          compressé/décompressé
+    @type dictionnaire list
+    @ivar compressed Données compressé
+    @type compressed string
+    """
 
-    def __init__(self,):
+    def __init__(self):
         """
         Constructor
         """
@@ -30,6 +41,7 @@ class CompressionLZW:
         Définis le nom du fichier
 
         @param fileName Nom fichier
+        @type fileName string
         """
         self.fileName = fileName
 
@@ -38,9 +50,14 @@ class CompressionLZW:
         Lis le contenus du fichier fileName.
 
         @param fileName Nom du fichier à lire
+        @type fileName string
         """
         self.fileName = fileName
-        self.file = open(self.fileName, 'r')
+        try:
+            self.file = open(self.fileName, 'r')
+        except IOError as e:
+            print "I/O error({0}): {1}".format(e.errno, e.strerror)
+            sys.exit()
         self.content = self.file.read()
         self.fileName = fileName
 
@@ -49,9 +66,14 @@ class CompressionLZW:
         Lis le contenus du fichier fileName.
 
         @param fileName Nom du fichier à lire
+        @type fileName string
         """
         self.fileName = fileName
-        self.file = open(self.fileName, 'rb')
+        try:
+            self.file = open(self.fileName, 'rb')
+        except IOError as e:
+            print "I/O error({0}): {1}".format(e.errno, e.strerror)
+            sys.exit()
         content = self.file.read()
 
         binaryString = ""
@@ -65,8 +87,8 @@ class CompressionLZW:
         """
         Fonction permettant d'écrire les valeurs compresser dans un fichier
         binaire.
-        @param self doit avoir comme paramètre un objet CompressionLZW
-        @type self CompressionLZW
+        @param fileName Nom du fichier à créer
+        @type fileName string
         """
         binaryString = ""
         for i in self.compressed:
@@ -83,8 +105,8 @@ class CompressionLZW:
         """
         Fonction permettant d'écrire les valeurs décompresser dans un fichier
         texte standard.
-        @param self doit avoir comme paramètre un objet CompressionLZW
-        @type self CompressionLZW
+        @param fileName Nom du fichier à créer
+        @type fileName string
         """
         fileCompressed = open(fileName + ".txt", "wb")
         fileCompressed.write(self.content)
@@ -135,6 +157,14 @@ class CompressionLZW:
 
 
 def Compression(infile, outfile):
+    """
+    Fonction pour la compression d'un fichier utilisant les fonctions interne
+    de l'objet CompressionLZW
+    @param infile Fichier en entrée qui sera compressé
+    @type infile string
+    @param outfile Nom du fichier en sortie compressé
+    @type outfile string
+    """
     fileD = CompressionLZW()
     fileD.readFileText(infile)
     fileD.compress()
@@ -142,6 +172,14 @@ def Compression(infile, outfile):
 
 
 def Decompression(infile, outfile):
+    """
+    Fonction pour la décompression d'un fichier utilisant les fonctions
+    interne de l'objet CompressionLZW
+    @param infile Fichier en entrée à décompresser
+    @type infile string
+    @param outfile Nom du fichier text en sortie
+    @type outfile string
+    """
     fileD = CompressionLZW()
     fileD.readFileBin(infile)
     fileD.decompress()
@@ -157,7 +195,7 @@ if __name__ == '__main__':
                                                  "un fichier avec la méthode "
                                                  "Lempel-Ziv-Welch")
     parser.add_argument('infile', nargs=1,
-                        help='Nom du fichier en entrée')
+                        help='Nom du fichier en entrée avec son extension')
     parser.add_argument('outfile', nargs='?',
                         help='Nom du fichier en sortie')
     parser.add_argument("-d", dest='Decompression', action="store_true",
@@ -171,7 +209,7 @@ if __name__ == '__main__':
     infile = str(m[1])
 
     if args.Compression is True and args.Decompression is False:
-    	Compression(infile, args.outfile)
+        Compression(infile, args.outfile)
     elif args.Decompression is True and args.Compression is False:
         Decompression(infile, args.outfile)
     else:
