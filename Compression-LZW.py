@@ -2,10 +2,13 @@
 #Python 2.7 a ete utilise
 
 from array import array
+import argparse
+import sys
+import re
 
 class CompressionLZW:
 
-    def __init__(self):
+    def __init__(self,):
         """
         Constructor
         """
@@ -58,7 +61,7 @@ class CompressionLZW:
             self.compressed.append(int(binaryString[i:i+9], 2))
 
 
-    def writeFileC(self):
+    def writeFileC(self, fileName):
         """
         Fonction permettant d'écrire les valeurs compresser dans un fichier binaire.
         @param self doit avoir comme paramètre un objet CompressionLZW
@@ -71,16 +74,17 @@ class CompressionLZW:
         binaryArray = array("B")
         for i in range(0, len(binaryString), 8):
             binaryArray.append(int(binaryString[i:i+8], 2))
-        fileCompressed = open(self.fileName + ".lzwly", "wb")
+
+        fileCompressed = open(fileName + ".lzwly", "wb")
         binaryArray.tofile(fileCompressed)
 
-    def writeFileD(self):
+    def writeFileD(self, fileName):
 		"""
 		Fonction permettant d'écrire les valeurs décompresser dans un fichier texte standard.
 		@param self doit avoir comme paramètre un objet CompressionLZW
 		@type self CompressionLZW
 		"""
-		fileCompressed = open(self.fileName + ".txt", "wb")
+		fileCompressed = open(fileName + ".txt", "wb")
 		fileCompressed.write(self.content)
 
     def compress(self):
@@ -88,7 +92,7 @@ class CompressionLZW:
         Fonction pour compresser un fichier texte. Il utilise un système d'association entre charactères ASCII qui sont positionné dans un tableau.
 
         """
-
+        print "Compression du fichier", self.fileName,"\n"
         w = ""
         for c in self.content:
            if w + c in self.dictionnaire:
@@ -107,6 +111,7 @@ class CompressionLZW:
         Fonction pour décompresser un fichier binaire. Il lis la valeur binaire (entre 256 et +++) pour pouvoir remplacer ce code par sa valeur il prend la valeur ou l'index
         de la liste et 256 - n ,  n étant la valeur binaire.
         """
+        print "Décompression du fichier", self.fileName,"\n"
         w = chr(self.compressed[0])
         self.dictionnaire = []
         self.content = w
@@ -122,16 +127,44 @@ class CompressionLZW:
             self.content += ent
             w = ent
 
+
+def Compression(infile, outfile):
+	fileD = CompressionLZW()
+	fileD.readFileText(infile)
+	fileD.compress()
+	fileD.writeFileC(outfile)
+
+def Decompression(infile, outfile):
+	fileD = CompressionLZW()
+	fileD.readFileBin(infile)
+	fileD.decompress()
+	fileD.writeFileD(outfile)
+
+
 if __name__ == '__main__':
-    #Compression d'un fichier
-	compress = CompressionLZW()
-#    compress.readFile("lorem.txt")
-	compress.readFileText("toBe.txt")
-	compress.compress()
-	compress.writeFileC()
-	#Décompression de ce même fichier
-	decompress = CompressionLZW()
-	decompress.readFileBin("toBe.txt.lzwly")
-	decompress.dictionnaire = compress.dictionnaire
-	decompress.decompress()
-	decompress.writeFileD()
+    """
+    Documentation interne disponible écrite ci-dessous.
+    Pour la lire exécutez le programme avec l'argument argument -h
+    """
+    parser = argparse.ArgumentParser(description='Compresse ou Décompresse un fichier avec la méthode Lempel-Ziv-Welch')
+    parser.add_argument('infile', nargs=1,
+    					help='Nom du fichier en entrée')
+    parser.add_argument('outfile', nargs='?',
+    					help='Nom du fichier en sortie')
+    parser.add_argument("-d", dest='Decompression', action="store_true",
+    					help='Décompresse le fichier en entrée')
+    parser.add_argument("-c", dest='Compression', action="store_true",
+    					help='Compresse le fichier en entrée')
+
+
+    args = parser.parse_args()
+
+    m = re.split("'",str(args.infile))
+    infile = str(m[1])
+
+    if args.Compression==True and args.Decompression==False:
+    	Compression(infile, args.outfile)
+    elif args.Decompression==True and args.Compression==False:
+    	Decompression(infile, args.outfile)
+    else:
+    	print("Effectuez la commande -h pour l'aide")
