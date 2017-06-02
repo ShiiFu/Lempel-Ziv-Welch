@@ -5,6 +5,8 @@ from array import array
 import argparse
 import sys
 import re
+import os
+
 
 
 class CompressionLZW:
@@ -133,7 +135,8 @@ class CompressionLZW:
                     else:
                         self.compressed.append(ord(w))
                 w = c
-
+		
+				
     def decompress(self):
         """
         Fonction pour décompresser un fichier binaire. Il lis la valeur binaire
@@ -159,6 +162,12 @@ class CompressionLZW:
             self.content += ent
             w = ent
 
+def TauxCompression(infile, outfile):
+    Tinfile = os.path.getsize(infile)
+    Toutfile = os.path.getsize(outfile)
+    taux = (Toutfile*100)/Tinfile
+    taux = 100 - taux
+    print("Le taux de compression du fichier est de "+str(taux)+" %\n")
 
 def Compression(infile, outfile):
     """
@@ -173,6 +182,8 @@ def Compression(infile, outfile):
     fileD.readFileText(infile)
     fileD.compress()
     fileD.writeFileC(outfile)
+    TauxCompression(infile, outfile+".lzwly")
+	
 
 
 def Decompression(infile, outfile):
@@ -218,3 +229,4 @@ if __name__ == '__main__':
         Decompression(infile, args.outfile)
     else:
         print("Effectuez la commande -h pour l'aide")
+
