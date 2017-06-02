@@ -120,6 +120,8 @@ class CompressionLZW:
         print "Compression du fichier", self.fileName, "\n"
         w = ""
         for c in self.content:
+            if len(self.dictionnaire) > 255:
+                self.dictionnaire = []
             if w + c in self.dictionnaire:
                 w = w + c
             else:
@@ -145,12 +147,14 @@ class CompressionLZW:
         self.content = w
         for c in self.compressed[1:]:
             if c > 255:
-                if self.dictionnaire[c-256]:
+                if len(self.dictionnaire) > c-255:
                     ent = self.dictionnaire[c-256]
                 else:
                     ent = w + w[0]
             else:
                 ent = chr(c)
+            if len(self.dictionnaire) > 255:
+                self.dictionnaire = []
             self.dictionnaire.append(w + ent[0])
             self.content += ent
             w = ent
