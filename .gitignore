@@ -1,0 +1,11 @@
+*.pyc
+docs/*.aux
+docs/*.dvi
+docs/*.idx
+docs/*.ilg
+docs/*.ind
+docs/*.log
+docs/*.out
+docs/*.ps
+docs/*.tex
+docs/*.toc

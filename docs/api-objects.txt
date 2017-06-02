@@ -1,6 +1,7 @@
 script-Compression_LZW_py	script-Compression_LZW_py-module.html
 script-Compression_LZW_py.Compression	script-Compression_LZW_py-module.html#Compression
 script-Compression_LZW_py.__package__	script-Compression_LZW_py-module.html#__package__
+script-Compression_LZW_py.TauxCompression	script-Compression_LZW_py-module.html#TauxCompression
 script-Compression_LZW_py.Decompression	script-Compression_LZW_py-module.html#Decompression
 script-Compression_LZW_py.CompressionLZW	script-Compression_LZW_py.CompressionLZW-class.html
 script-Compression_LZW_py.CompressionLZW.compressed	script-Compression_LZW_py.CompressionLZW-class.html#compressed
