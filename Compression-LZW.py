@@ -163,7 +163,7 @@ def TauxCompression(infile, outfile):
     Toutfile = os.path.getsize(outfile)
     taux = (Toutfile*100)/Tinfile
     taux = 100 - taux
-    print("Le taux de compression du fichier est de "+str(taux)+" %\n")
+    print("Le taux de compression du fichier est de "+str(taux)+"%\n")
 
 def Compression(infile, outfile):
     """
@@ -218,6 +218,11 @@ if __name__ == '__main__':
 
     m = re.split("'", str(args.infile))
     infile = str(m[1])
+	
+    if args.outfile == None:
+        m = re.split(".", str(args.infile))
+        tmp = str(m[0])
+        args.outfile == tmp+".lzwly"
 
     if args.Compression is True and args.Decompression is False:
         Compression(infile, args.outfile)
