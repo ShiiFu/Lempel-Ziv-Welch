@@ -100,7 +100,7 @@ class CompressionLZW:
         for i in range(0, len(binaryString), 8):
             binaryArray.append(int(binaryString[i:i+8], 2))
 
-        fileCompressed = open(fileName + ".lzwly", "wb")
+        fileCompressed = open(fileName, "wb")
         binaryArray.tofile(fileCompressed)
 
     def writeFileD(self, fileName):
@@ -161,9 +161,10 @@ class CompressionLZW:
 def TauxCompression(infile, outfile):
     Tinfile = os.path.getsize(infile)
     Toutfile = os.path.getsize(outfile)
-    taux = (Toutfile*100)/Tinfile
-    taux = 100 - taux
+    taux = 1 - float(Toutfile)/Tinfile
+    taux = taux * 100
     print("Le taux de compression du fichier est de "+str(taux)+"%\n")
+    print("Le taux a été calculer comme suit : \n 1 - Vf/Vi")
 
 def Compression(infile, outfile):
     """
@@ -178,7 +179,7 @@ def Compression(infile, outfile):
     fileD.readFileText(infile)
     fileD.compress()
     fileD.writeFileC(outfile)
-    TauxCompression(infile, outfile+".lzwly")
+    TauxCompression(infile, outfile)
 	
 
 
@@ -219,15 +220,21 @@ if __name__ == '__main__':
     m = re.split("'", str(args.infile))
     infile = str(m[1])
 	
+	
     if args.outfile == None:
-        m = re.split(".", str(args.infile))
-        tmp = str(m[0])
-        args.outfile == tmp+".lzwly"
+        m = re.split("\.", str(infile))
+        outfile = str(m[0])+".lzwly"
+        print outfile
+   
 
     if args.Compression is True and args.Decompression is False:
-        Compression(infile, args.outfile)
+        test = re.split("\.", str(infile))
+        if str(test[1]) == "txt":
+            Compression(infile, outfile)
+        else:
+            print("Seulement les fichiers textes sont compatibles !")
     elif args.Decompression is True and args.Compression is False:
-        Decompression(infile, args.outfile)
+        Decompression(infile, outfile)
     else:
         print("Effectuez la commande -h pour l'aide")
 
