@@ -8,7 +8,6 @@ import re
 import os
 
 
-
 class CompressionLZW:
     """
     Classe définnisant les paramètres d'un fichier à compresser ou à
@@ -135,8 +134,7 @@ class CompressionLZW:
                     else:
                         self.compressed.append(ord(w))
                 w = c
-		
-				
+
     def decompress(self):
         """
         Fonction pour décompresser un fichier binaire. Il lis la valeur binaire
@@ -162,6 +160,7 @@ class CompressionLZW:
             self.content += ent
             w = ent
 
+
 def TauxCompression(infile, outfile):
     Tinfile = os.path.getsize(infile)
     Toutfile = os.path.getsize(outfile)
@@ -169,6 +168,7 @@ def TauxCompression(infile, outfile):
     taux = taux * 100
     print("Le taux de compression du fichier est de "+str(taux)+"%\n")
     print("Le taux a été calculer comme suit : \n 1 - Vf/Vi")
+
 
 def Compression(infile, outfile):
     """
@@ -184,7 +184,6 @@ def Compression(infile, outfile):
     fileD.compress()
     fileD.writeFileC(outfile)
     TauxCompression(infile, outfile)
-	
 
 
 def Decompression(infile, outfile):
@@ -223,13 +222,11 @@ if __name__ == '__main__':
 
     m = re.split("'", str(args.infile))
     infile = str(m[1])
-	
-	
-    if args.outfile == None:
+
+    if args.outfile is None:
         m = re.split("\.", str(infile))
         outfile = str(m[0])+".lzwly"
         print outfile
-   
 
     if args.Compression is True and args.Decompression is False:
         test = re.split("\.", str(infile))
@@ -241,4 +238,3 @@ if __name__ == '__main__':
         Decompression(infile, outfile)
     else:
         print("Effectuez la commande -h pour l'aide")
-
